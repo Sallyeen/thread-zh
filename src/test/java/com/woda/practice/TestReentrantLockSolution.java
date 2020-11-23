@@ -34,6 +34,7 @@ public class TestReentrantLockSolution {
     public void test() throws Exception {
         ExecutorService executor = Executors.newFixedThreadPool(producers.size() + consumers.size());
         consumers.forEach(executor::submit);
-        consumers.forEach(executor::submit);
+        producers.forEach(executor::submit);
+        Thread.sleep(30000);
     }
 }
