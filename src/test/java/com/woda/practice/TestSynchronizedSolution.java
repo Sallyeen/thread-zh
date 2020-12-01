@@ -1,6 +1,6 @@
 package com.woda.practice;
 
-import com.woda.practice.solutions.ReentrantLockSolution;
+import com.woda.practice.solutions.SynchronizedSolution;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,8 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class TestReentrantLockSolution {
-
+public class TestSynchronizedSolution {
     private Queue<String> queue;
     private List<Producer> producers;
     private List<Consumer> consumers;
@@ -21,9 +20,9 @@ public class TestReentrantLockSolution {
     @Before
     public void init() throws Exception {
         this.queue = new LinkedList<>();
-        this.producers = IntStream.range(0, 3).mapToObj(id -> new ReentrantLockSolution.ProducerImpl(queue, id))
+        this.producers = IntStream.range(0, 3).mapToObj(id -> new SynchronizedSolution.ProducerImpl(queue, id))
                 .collect(Collectors.toList());
-        this.consumers = IntStream.range(0, 5).mapToObj(id -> new ReentrantLockSolution.ConsumerImpl(queue, id))
+        this.consumers = IntStream.range(0, 5).mapToObj(id -> new SynchronizedSolution.ConsumerImpl(queue, id))
                 .collect(Collectors.toList());
     }
 
@@ -35,4 +34,5 @@ public class TestReentrantLockSolution {
         producers.forEach(executor::submit);
         Thread.sleep(30000);
     }
+
 }

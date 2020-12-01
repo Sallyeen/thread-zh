@@ -18,9 +18,8 @@ public abstract class Producer implements Runnable {
         queue.offer(msg);
     }
 
-    public void stop() {
+    /*public void stop() {
         boolean isRunning = false;
-    }
-
+    }*/
 
 }
