@@ -13,13 +13,8 @@ public abstract class Producer implements Runnable {
     }
 
     protected void produce() throws InterruptedException {
-        String msg = String.format("Message from Producer %d : ", this.id);
+        String msg = String.format("Message from Producer %d", this.id);
         System.out.printf("Producer %d produces: %s\n", this.id, msg);
         queue.offer(msg);
     }
-
-    /*public void stop() {
-        boolean isRunning = false;
-    }*/
-
 }

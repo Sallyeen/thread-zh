@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class TestSynchronizedSolution {
+    SynchronizedSolution solution = new SynchronizedSolution();
     private Queue<String> queue;
     private List<Producer> producers;
     private List<Consumer> consumers;
@@ -20,19 +21,17 @@ public class TestSynchronizedSolution {
     @Before
     public void init() throws Exception {
         this.queue = new LinkedList<>();
-        this.producers = IntStream.range(0, 3).mapToObj(id -> new SynchronizedSolution.ProducerImpl(queue, id))
+        this.producers = IntStream.range(0, 4).mapToObj(id -> solution.new ProducerImpl(queue, id))
                 .collect(Collectors.toList());
-        this.consumers = IntStream.range(0, 5).mapToObj(id -> new SynchronizedSolution.ConsumerImpl(queue, id))
+        this.consumers = IntStream.range(0, 5).mapToObj(id -> solution.new ConsumerImpl(queue, id))
                 .collect(Collectors.toList());
     }
 
-    /*@Ignore*/
     @Test
     public void test() throws Exception {
         ExecutorService executor = Executors.newFixedThreadPool(producers.size() + consumers.size());
-        consumers.forEach(executor::submit);
         producers.forEach(executor::submit);
+        consumers.forEach(executor::submit);
         Thread.sleep(30000);
     }
-
 }
