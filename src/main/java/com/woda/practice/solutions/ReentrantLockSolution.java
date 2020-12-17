@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ReentrantLockSolution {
 
     private final Lock lock = new ReentrantLock(true);
-    private Condition unEmpty = lock.newCondition();
+    private final Condition unEmpty = lock.newCondition();
 
     public class ProducerImpl extends Producer {
         public ProducerImpl(Queue<String> queue, int id) {
@@ -20,20 +20,27 @@ public class ReentrantLockSolution {
         }
 
         public void run() {
-            while (true) {
-                lock.lock();
-                try {
-                    produce();
+            try {
+                while (true) {
+                    lock.lock();
+                    try {
+                        produce();
+                        unEmpty.signalAll();
+
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        System.out.println("produce error");
+                    } finally {
+                        lock.unlock();
+                    }
                     TimeUnit.MILLISECONDS.sleep(600);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    System.out.println("produce error");
-                } finally {
-                    lock.unlock();
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
+
 
     public class ConsumerImpl extends Consumer {
         public ConsumerImpl(Queue<String> queue, int id) {
@@ -45,14 +52,11 @@ public class ReentrantLockSolution {
                 lock.lock();
                 try {
                     while (queue.isEmpty()) {
-                        System.out.println("The queue is empty and consumption is suspended");
                         unEmpty.await();
                     }
                     consume();
-                    unEmpty.signalAll();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.out.println("consume error");
                 } finally {
                     lock.unlock();
                 }

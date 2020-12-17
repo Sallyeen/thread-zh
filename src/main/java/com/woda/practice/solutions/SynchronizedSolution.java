@@ -14,18 +14,16 @@ public class SynchronizedSolution {
         }
 
         public void run() {
-            while (true) {
-                try {
+            try {
+                while (true) {
                     synchronized (queue) {
                         produce();
-                        TimeUnit.MILLISECONDS.sleep(600);
+                        queue.notifyAll();
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    System.out.println("produce error");
-                } finally {
-                    System.out.println("Exit production process");
+                    TimeUnit.MILLISECONDS.sleep(600);
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -37,22 +35,17 @@ public class SynchronizedSolution {
         }
 
         public void run() {
-            while (true) {
-                try {
+            try {
+                while (true) {
                     synchronized (queue) {
                         while (queue.isEmpty()) {
-                            System.out.println("The queue is empty and consumption is suspended");
                             queue.wait();
                         }
                         consume();
-                        queue.notifyAll();
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("consume error");
-                } finally {
-                    System.out.println("Exit consumption process");
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

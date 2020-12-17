@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit;
 
 public class BlockingQueueSolution {
 
-
     public class ProducerImpl extends Producer {
+
         public ProducerImpl(BlockingQueue<String> queue, int id) {
             super(queue, id);
         }
@@ -29,7 +29,6 @@ public class BlockingQueueSolution {
                     TimeUnit.MILLISECONDS.sleep(600);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                    System.out.println("produce error");
                 }
             }
         }
@@ -52,7 +51,6 @@ public class BlockingQueueSolution {
                     consume();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                    System.out.println("consume error");
                 }
             }
         }
